@@ -58,7 +58,7 @@ export class Lema {
             "jovem", "juíza", "juizo", "julho", "junho", "jurar", "justa"
         ];
         const numeroAleatorio = Math.floor(Math.random() * palavrasSecretas.length);
-        this.palavraSecreta = 'TESTÉ'; //palavrasSecretas[numeroAleatorio].toUpperCase();
+        this.palavraSecreta = palavrasSecretas[numeroAleatorio].toUpperCase();
     }
     rodadaFinalizada() {
         this.rodada++;

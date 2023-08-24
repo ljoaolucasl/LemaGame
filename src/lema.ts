@@ -67,7 +67,7 @@ export class Lema {
         ];
 
         const numeroAleatorio: number = Math.floor(Math.random() * palavrasSecretas.length);
-        this.palavraSecreta = 'TESTÉ'; //palavrasSecretas[numeroAleatorio].toUpperCase();
+        this.palavraSecreta = palavrasSecretas[numeroAleatorio].toUpperCase();
     }
 
     public rodadaFinalizada(): void {

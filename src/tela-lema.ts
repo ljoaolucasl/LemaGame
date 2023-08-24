@@ -134,18 +134,18 @@ export class LemaView {
 
             switch (estadoLetras[i]) {
                 case EstadoLetras.ExistePosicaoCorreta:
-                    letra.style.backgroundColor = 'green';
+                    letra.style.backgroundColor = '#349b18';
                     letra.textContent = this.lemaAct.PalavraSecreta[i];
-                    botaoTeclado.style.backgroundColor = 'green';
+                    botaoTeclado.style.backgroundColor = '#349b18';
                     break;
                 case EstadoLetras.Existe:
-                    letra.style.backgroundColor = 'yellow';
-                    if (botaoTeclado.style.backgroundColor != 'green')
-                        botaoTeclado.style.backgroundColor = 'yellow';
+                    letra.style.backgroundColor = '#a77f06';
+                    if (botaoTeclado.style.backgroundColor != '#349b18')
+                        botaoTeclado.style.backgroundColor = '#a77f06';
                     break;
                 case EstadoLetras.NaoExiste:
-                    letra.style.backgroundColor = '#382732';
-                    botaoTeclado.style.backgroundColor = '#382732';
+                    letra.style.backgroundColor = '#211b1f';
+                    botaoTeclado.style.backgroundColor = '#211b1f';
                     break;
             }
         }
@@ -176,6 +176,12 @@ export class LemaView {
                 letra.textContent = '';
                 (letra as HTMLSpanElement).style.backgroundColor = '';
             });
+        });
+
+        const botoesTeclado = Array.from(this.teclado.querySelectorAll('.key'));
+
+        botoesTeclado.forEach(botoes => {
+            (botoes as HTMLButtonElement).style.backgroundColor = '#382732';
         });
 
         this.teclado.style.pointerEvents = 'auto';
