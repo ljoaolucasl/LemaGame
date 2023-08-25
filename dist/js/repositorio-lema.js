@@ -11,7 +11,7 @@ export class repositorioLema {
                 porcentagemVitoria: 0,
                 sequenciaVitoria: 0,
                 melhorSequencia: 0,
-                historico: [0, 0, 0, 0, 0, 0, 0],
+                historico: [0, 0, 0, 0, 0, 0],
             };
         }
     }

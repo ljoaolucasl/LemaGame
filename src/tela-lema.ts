@@ -268,7 +268,7 @@ export class LemaView {
     public atualizarHistorico(jogadorGanhou: boolean) {
         this.estatisticas.jogosJogados++;
         this.estatisticas.jogosGanhos += jogadorGanhou ? 1 : 0;
-        this.estatisticas.porcentagemVitoria = (this.estatisticas.jogosGanhos / this.estatisticas.jogosJogados) * 100;
+        this.estatisticas.porcentagemVitoria = Math.floor((this.estatisticas.jogosGanhos / this.estatisticas.jogosJogados) * 100);
         if (jogadorGanhou){
             this.estatisticas.sequenciaVitoria += 1;
             this.estatisticas.historico[this.lemaAct.rodada]++;
