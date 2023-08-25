@@ -1,6 +1,12 @@
 import { EstadoLetras } from "./estado-letras.js";
 export class Lema {
     constructor() {
+        this.jogosJogados = 0;
+        this.jogosGanhos = 0;
+        this.porcentagemVitoria = 0;
+        this.sequenciaVitoria = 0;
+        this.melhorSequencia = 0;
+        this.historico = [0, 0, 0, 0, 0, 0];
         this.palavraSecreta = '';
         this.mensagemFinal = '';
         this.rodada = 0;
@@ -101,6 +107,19 @@ export class Lema {
     compararStringSemAcento(letra1, letra2) {
         const normalize = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
         return normalize(letra1).toUpperCase() === normalize(letra2).toUpperCase();
+    }
+    atualizarHistorico(jogadorGanhou) {
+        this.jogosJogados++;
+        this.jogosGanhos += jogadorGanhou ? 1 : 0;
+        this.porcentagemVitoria = (this.jogosGanhos / this.jogosJogados) * 100;
+        if (jogadorGanhou) {
+            this.sequenciaVitoria += 1;
+        }
+        else {
+            this.sequenciaVitoria = 0;
+        }
+        this.melhorSequencia = this.sequenciaVitoria > this.melhorSequencia ? this.sequenciaVitoria : this.melhorSequencia;
+        this.historico[this.rodada]++;
     }
 }
 //# sourceMappingURL=lema.js.map

@@ -1,16 +1,48 @@
 import { Lema } from "./lema.js";
 import { EstadoLetras } from "./estado-letras.js";
+import { repositorioLema } from "./repositorio-lema.js";
 export class LemaView {
     constructor() {
         this.lemaAct = new Lema();
+        this.lemaHistorico = new repositorioLema();
+        this.estatisticas = this.lemaHistorico.carregarEstatisticasSalvas();
+        this.configurarJanelaEstatisticas();
+        this.configurarBotaoAbrirEstatisticas();
         this.configurarMensagem();
         this.configurarRodadas();
         this.registrarEventos();
         this.iniciarRodada();
     }
+    configurarJanelaEstatisticas() {
+        this.jogosJogados = document.getElementById('jogosJogados');
+        this.jogosGanhos = document.getElementById('jogosGanhos');
+        this.porcentagemVitoria = document.getElementById('porcentagemVitoria');
+        this.sequenciaVitoria = document.getElementById('sequenciaVitorias');
+        this.melhorSequencia = document.getElementById('melhorSequencia');
+        this.grafico = document.getElementById('grafico');
+    }
+    abrirEstatisticas() {
+        this.carregarEstatisticas();
+        this.janelaEstatisticas.style.display = 'block';
+    }
+    fecharEstatisticas() {
+        this.janelaEstatisticas.style.display = 'none';
+    }
+    configurarBotaoAbrirEstatisticas() {
+        this.btnAbrirEstatisticas = document.getElementById('btnAbrirEstatisticas');
+        this.janelaEstatisticas = document.getElementById('janelaEstatisticas');
+        this.btnAbrirEstatisticas.addEventListener('click', () => {
+            this.abrirEstatisticas();
+        });
+        const closeBtn = this.janelaEstatisticas.querySelector('#btnFechar');
+        closeBtn.addEventListener('click', () => {
+            this.fecharEstatisticas();
+        });
+    }
     configurarMensagem() {
         this.mensagem = document.getElementById('mensagemFinal');
         this.mensagemContainer = document.querySelector('.mensagem-container');
+        this.mensagem.addEventListener('click', () => this.reiniciarJogo());
     }
     configurarRodadas() {
         this.rodada1 = document.getElementById('rodada1');
@@ -35,7 +67,6 @@ export class LemaView {
                 botao.addEventListener('click', (sender) => this.inserirLetra(sender));
             }
         }
-        this.mensagem.addEventListener('click', () => this.reiniciarJogo());
     }
     confirmarPalavra(sender) {
         this.lemaAct.palavraEscolhida = this.obterPalavraCompleta();
@@ -109,9 +140,11 @@ export class LemaView {
         }
     }
     jogadorGanhou() {
+        this.atualizarHistorico(true);
         this.mostrarMensagemFinal('green');
     }
     jogadorPerdeu() {
+        this.atualizarHistorico(false);
         this.mostrarMensagemFinal('red');
     }
     mostrarMensagemFinal(cor) {
@@ -135,6 +168,41 @@ export class LemaView {
         });
         this.teclado.style.pointerEvents = 'auto';
         this.iniciarRodada();
+    }
+    carregarEstatisticas() {
+        this.jogosJogados.textContent = this.estatisticas.jogosJogados.toString();
+        this.jogosGanhos.textContent = this.estatisticas.jogosGanhos.toString();
+        this.porcentagemVitoria.textContent = this.estatisticas.porcentagemVitoria.toString() + '%';
+        this.sequenciaVitoria.textContent = this.estatisticas.sequenciaVitoria.toString();
+        this.melhorSequencia.textContent = this.estatisticas.melhorSequencia.toString();
+        this.atualizarBarrasGrafico();
+    }
+    atualizarBarrasGrafico() {
+        for (let i = 0; i < this.rodadas.length; i++) {
+            const barraElement = document.getElementById(`barraRodada${i + 1}`);
+            const largura = (this.estatisticas.historico[i] || 0.1) * 10;
+            barraElement.children[1].style.width = `${largura}%`;
+            barraElement.children[1].textContent = this.estatisticas.historico[i].toString();
+        }
+        const barraPerdaElement = document.getElementById('barraPerda');
+        const larguraPerda = (this.estatisticas.historico[this.estatisticas.historico.length - 1]) * 10;
+        barraPerdaElement.children[1].style.width = `${larguraPerda}%`;
+        barraPerdaElement.children[1].textContent = this.estatisticas.historico[this.estatisticas.historico.length - 1].toString();
+    }
+    atualizarHistorico(jogadorGanhou) {
+        this.estatisticas.jogosJogados++;
+        this.estatisticas.jogosGanhos += jogadorGanhou ? 1 : 0;
+        this.estatisticas.porcentagemVitoria = (this.estatisticas.jogosGanhos / this.estatisticas.jogosJogados) * 100;
+        if (jogadorGanhou) {
+            this.estatisticas.sequenciaVitoria += 1;
+            this.estatisticas.historico[this.lemaAct.rodada]++;
+        }
+        else {
+            this.estatisticas.sequenciaVitoria = 0;
+            this.estatisticas.historico[this.estatisticas.historico.length - 1]++;
+        }
+        this.estatisticas.melhorSequencia = this.estatisticas.sequenciaVitoria > this.estatisticas.melhorSequencia ? this.estatisticas.sequenciaVitoria : this.estatisticas.melhorSequencia;
+        this.lemaHistorico.salvarEstatisticas(this.estatisticas);
     }
 }
 //# sourceMappingURL=tela-lema.js.map
