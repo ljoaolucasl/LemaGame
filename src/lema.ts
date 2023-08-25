@@ -5,6 +5,13 @@ export class Lema {
         this.iniciarJogo();
     }
 
+    public jogosJogados: number = 0;
+    public jogosGanhos: number = 0;
+    public porcentagemVitoria: number = 0;
+    public sequenciaVitoria: number = 0;
+    public melhorSequencia: number = 0;
+    public historico: number[] = [0, 0, 0, 0, 0, 0];
+
     private palavraSecreta: string = '';
     private mensagemFinal: string = '';
 
@@ -124,5 +131,19 @@ export class Lema {
             s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     
         return normalize(letra1).toUpperCase() === normalize(letra2).toUpperCase();
+    }
+
+    public atualizarHistorico(jogadorGanhou: boolean) {
+        this.jogosJogados++;
+        this.jogosGanhos += jogadorGanhou ? 1 : 0;
+        this.porcentagemVitoria = (this.jogosGanhos / this.jogosJogados) * 100;
+        if (jogadorGanhou){
+            this.sequenciaVitoria += 1;
+        }
+        else {
+            this.sequenciaVitoria = 0;
+        }
+        this.melhorSequencia = this.sequenciaVitoria > this.melhorSequencia ? this.sequenciaVitoria : this.melhorSequencia;
+        this.historico[this.rodada]++;
     }
 }

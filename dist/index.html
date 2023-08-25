@@ -11,6 +11,30 @@
     <script src="js/main.js" type="module" defer></script>
 </head>
 <body>
+    <div class="barra-menu">
+        <button class="btn-estatisticas" id="btnAbrirEstatisticas">Ver Estatísticas</button>
+    </div>
+    <div id="janelaEstatisticas" class="janela">
+        <div class="janela-content">
+          <span class="btn-fechar" id="btnFechar">&times;</span>
+          <h2>Estatísticas do Jogo</h2>
+          <p>Jogos Jogados: <span id="jogosJogados">0</span></p>
+          <p>Jogos Ganhos: <span id="jogosGanhos">0</span></p>
+          <p>Porcentagem de Vitória: <span id="porcentagemVitoria">0%</span></p>
+          <p>Sequência de Vitórias: <span id="sequenciaVitorias">0</span></p>
+          <p>Melhor Sequência: <span id="melhorSequencia">0</span></p>
+          <h3>Gráfico de Rodadas</h3>
+          <div class="grafico" id="grafico">
+            <div class="barra" id="barraRodada1"><span>1.</span><p style="width: 0%;"></p></div>
+            <div class="barra" id="barraRodada2"><span>2.</span><p style="width: 0%;"></p></div>
+            <div class="barra" id="barraRodada3"><span>3.</span><p style="width: 0%;"></p></div>
+            <div class="barra" id="barraRodada4"><span>4.</span><p style="width: 0%;"></p></div>
+            <div class="barra" id="barraRodada5"><span>5.</span><p style="width: 0%;"></p></div>
+            <div class="barra" id="barraRodada6"><span>6.</span><p style="width: 0%;"></p></div>
+            <div class="barra" id="barraPerda"><span style="color: black">X.</span><p style="width: 0%;"></p></div>
+          </div>
+        </div>
+      </div>
     <div class="mensagem-container">
         <p class="mensagem-final" id="mensagemFinal">teste</p>
     </div>
