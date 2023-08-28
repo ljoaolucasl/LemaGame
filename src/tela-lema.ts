@@ -103,10 +103,10 @@ export class LemaView {
         const botoesTeclado = Array.from(this.teclado.querySelectorAll('.key'));
 
         for (let botao of botoesTeclado) {
-            if (botao.textContent == 'Enter') {
+            if (botao.textContent?.includes('subdirectory_arrow_left')) {
                 botao.addEventListener('click', (sender) => this.confirmarPalavra(sender));
             }
-            else if (botao.textContent == 'Del') {
+            else if (botao.textContent?.includes('backspace')) {
                 botao.addEventListener('click', (sender) => this.apagarLetra(sender));
             }
             else {
