@@ -54,13 +54,14 @@ export class LemaView {
         this.rodadas = [this.rodada1, this.rodada2, this.rodada3, this.rodada4, this.rodada5, this.rodada6];
     }
     registrarEventos() {
+        var _a, _b;
         this.teclado = document.getElementById('teclado');
         const botoesTeclado = Array.from(this.teclado.querySelectorAll('.key'));
         for (let botao of botoesTeclado) {
-            if (botao.textContent == 'Enter') {
+            if ((_a = botao.textContent) === null || _a === void 0 ? void 0 : _a.includes('subdirectory_arrow_left')) {
                 botao.addEventListener('click', (sender) => this.confirmarPalavra(sender));
             }
-            else if (botao.textContent == 'Del') {
+            else if ((_b = botao.textContent) === null || _b === void 0 ? void 0 : _b.includes('backspace')) {
                 botao.addEventListener('click', (sender) => this.apagarLetra(sender));
             }
             else {
