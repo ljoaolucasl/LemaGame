@@ -71,11 +71,12 @@ export class Lema {
     }
     obterEstadoLetras() {
         const estadoLetras = [];
+        const normalize = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
         for (let i = 0; i < this.palavraEscolhida.length; i++) {
             if (this.compararStringSemAcento(this.palavraEscolhida[i], this.palavraSecreta[i])) {
                 estadoLetras[i] = EstadoLetras.ExistePosicaoCorreta;
             }
-            else if (this.palavraSecreta.includes(this.palavraEscolhida[i])) {
+            else if (normalize(this.palavraSecreta).includes(this.palavraEscolhida[i])) {
                 estadoLetras[i] = EstadoLetras.Existe;
             }
             else {
