@@ -75,7 +75,7 @@ body {
     font-size: 20px;
     text-align: center;
     position: absolute;
-    left: 5px; /* Ajuste a posição horizontal da numeração */
+    left: 5px;
 }
   
   .btn-estatisticas {
@@ -207,6 +207,7 @@ body {
   'opsz' 48
 }
 
+/* Ajustes para Smartphone */
 @media (max-width: 768px) {
     .game-container {
         width: 90%;
