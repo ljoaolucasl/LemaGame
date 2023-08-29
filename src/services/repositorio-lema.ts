@@ -1,7 +1,7 @@
-import { estatisticasLema } from "./estatisticas-lema.js";
+import { IEstatisticasLema } from "../models/estatisticas-lema";
 
-export class repositorioLema {
-    public carregarEstatisticasSalvas(): estatisticasLema {
+export class RepositorioLema {
+    public carregarEstatisticasSalvas(): IEstatisticasLema {
         const estatisticasJSON = localStorage.getItem('estatisticas');
         if (estatisticasJSON) {
             return JSON.parse(estatisticasJSON);
@@ -17,7 +17,7 @@ export class repositorioLema {
         }
     }
 
-    public salvarEstatisticas(estatisticas: estatisticasLema) {
+    public salvarEstatisticas(estatisticas: IEstatisticasLema) {
         localStorage.setItem('estatisticas', JSON.stringify(estatisticas));
     }
 }

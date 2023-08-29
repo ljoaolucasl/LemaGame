@@ -1,4 +1,4 @@
-export interface estatisticasLema {
+export interface IEstatisticasLema {
 
     jogosJogados: number;
     jogosGanhos: number;

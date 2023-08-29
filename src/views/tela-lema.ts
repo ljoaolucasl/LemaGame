@@ -1,11 +1,44 @@
-import { Lema } from "./lema.js";
-import { EstadoLetras } from "./estado-letras.js";
-import { repositorioLema } from "./repositorio-lema.js";
+import { Lema } from "../models/lema";
+import { EstadoLetras } from "../models/estado-letras";
+import { RepositorioLema } from "../services/repositorio-lema";
+import { IEstatisticasLema } from "../models/estatisticas-lema";
+
 export class LemaView {
+    private lemaAct: Lema;
+    private lemaHistorico: RepositorioLema;
+
+    private btnAbrirEstatisticas: HTMLButtonElement;
+    private janelaEstatisticas: HTMLElement;
+
+    private jogosJogados: HTMLSpanElement;
+    private jogosGanhos: HTMLSpanElement;
+    private porcentagemVitoria: HTMLSpanElement;
+    private sequenciaVitoria: HTMLSpanElement;
+    private melhorSequencia: HTMLSpanElement;
+    private grafico: HTMLDivElement;
+
+    private estatisticas: IEstatisticasLema;
+
+    private mensagem: HTMLParagraphElement;
+        
+    private mensagemContainer: HTMLDivElement;
+
+    private rodada1: HTMLDivElement;
+    private rodada2: HTMLDivElement;
+    private rodada3: HTMLDivElement;
+    private rodada4: HTMLDivElement;
+    private rodada5: HTMLDivElement;
+    private rodada6: HTMLDivElement;
+
+    private rodadas: HTMLDivElement[];
+
+    private teclado: HTMLDivElement;
+
     constructor() {
         this.lemaAct = new Lema();
-        this.lemaHistorico = new repositorioLema();
+        this.lemaHistorico = new RepositorioLema();
         this.estatisticas = this.lemaHistorico.carregarEstatisticasSalvas();
+
         this.configurarJanelaEstatisticas();
         this.configurarBotaoAbrirEstatisticas();
         this.configurarMensagem();
@@ -13,55 +46,67 @@ export class LemaView {
         this.registrarEventos();
         this.iniciarRodada();
     }
-    configurarJanelaEstatisticas() {
-        this.jogosJogados = document.getElementById('jogosJogados');
-        this.jogosGanhos = document.getElementById('jogosGanhos');
-        this.porcentagemVitoria = document.getElementById('porcentagemVitoria');
-        this.sequenciaVitoria = document.getElementById('sequenciaVitorias');
-        this.melhorSequencia = document.getElementById('melhorSequencia');
-        this.grafico = document.getElementById('grafico');
+
+    private configurarJanelaEstatisticas() {
+        this.jogosJogados = document.getElementById('jogosJogados') as HTMLSpanElement;
+        this.jogosGanhos = document.getElementById('jogosGanhos') as HTMLSpanElement;
+        this.porcentagemVitoria = document.getElementById('porcentagemVitoria') as HTMLSpanElement;
+        this.sequenciaVitoria = document.getElementById('sequenciaVitorias') as HTMLSpanElement;
+        this.melhorSequencia = document.getElementById('melhorSequencia') as HTMLSpanElement;
+        this.grafico = document.getElementById('grafico') as HTMLDivElement;
     }
-    abrirEstatisticas() {
+
+    private abrirEstatisticas() {
         this.carregarEstatisticas();
         this.janelaEstatisticas.style.display = 'block';
     }
-    fecharEstatisticas() {
+
+    private fecharEstatisticas() {
         this.janelaEstatisticas.style.display = 'none';
     }
-    configurarBotaoAbrirEstatisticas() {
-        this.btnAbrirEstatisticas = document.getElementById('btnAbrirEstatisticas');
-        this.janelaEstatisticas = document.getElementById('janelaEstatisticas');
+
+    private configurarBotaoAbrirEstatisticas() {
+        this.btnAbrirEstatisticas = document.getElementById('btnAbrirEstatisticas') as HTMLButtonElement;
+        this.janelaEstatisticas = document.getElementById('janelaEstatisticas') as HTMLElement;
+
         this.btnAbrirEstatisticas.addEventListener('click', () => {
             this.abrirEstatisticas();
         });
-        const closeBtn = this.janelaEstatisticas.querySelector('#btnFechar');
+
+        const closeBtn = this.janelaEstatisticas.querySelector('#btnFechar') as HTMLButtonElement;
         closeBtn.addEventListener('click', () => {
             this.fecharEstatisticas();
         });
     }
-    configurarMensagem() {
-        this.mensagem = document.getElementById('mensagemFinal');
-        this.mensagemContainer = document.querySelector('.mensagem-container');
-        this.mensagem.addEventListener('click', () => this.reiniciarJogo());
+
+    private configurarMensagem() {
+        this.mensagem = document.getElementById('mensagemFinal') as HTMLParagraphElement;
+        this.mensagemContainer = document.querySelector('.mensagem-container') as HTMLDivElement;
+
+        this.mensagem.addEventListener('click', () => this.reiniciarJogo()); 
     }
-    configurarRodadas() {
-        this.rodada1 = document.getElementById('rodada1');
-        this.rodada2 = document.getElementById('rodada2');
-        this.rodada3 = document.getElementById('rodada3');
-        this.rodada4 = document.getElementById('rodada4');
-        this.rodada5 = document.getElementById('rodada5');
-        this.rodada6 = document.getElementById('rodada6');
+
+    private configurarRodadas() {
+        this.rodada1 = document.getElementById('rodada1') as HTMLDivElement;
+        this.rodada2 = document.getElementById('rodada2') as HTMLDivElement;
+        this.rodada3 = document.getElementById('rodada3') as HTMLDivElement;
+        this.rodada4 = document.getElementById('rodada4') as HTMLDivElement;
+        this.rodada5 = document.getElementById('rodada5') as HTMLDivElement;
+        this.rodada6 = document.getElementById('rodada6') as HTMLDivElement;
+
         this.rodadas = [this.rodada1, this.rodada2, this.rodada3, this.rodada4, this.rodada5, this.rodada6];
     }
-    registrarEventos() {
-        var _a, _b;
-        this.teclado = document.getElementById('teclado');
+
+    private registrarEventos() {
+        this.teclado = document.getElementById('teclado') as HTMLDivElement;
+
         const botoesTeclado = Array.from(this.teclado.querySelectorAll('.key'));
+
         for (let botao of botoesTeclado) {
-            if ((_a = botao.textContent) === null || _a === void 0 ? void 0 : _a.includes('subdirectory_arrow_left')) {
+            if (botao.textContent?.includes('subdirectory_arrow_left')) {
                 botao.addEventListener('click', (sender) => this.confirmarPalavra(sender));
             }
-            else if ((_b = botao.textContent) === null || _b === void 0 ? void 0 : _b.includes('backspace')) {
+            else if (botao.textContent?.includes('backspace')) {
                 botao.addEventListener('click', (sender) => this.apagarLetra(sender));
             }
             else {
@@ -69,13 +114,17 @@ export class LemaView {
             }
         }
     }
-    confirmarPalavra(sender) {
+
+    private confirmarPalavra(sender: Event) {
         this.lemaAct.palavraEscolhida = this.obterPalavraCompleta();
+        
         if (this.lemaAct.verificaSePalavraCompleta())
             this.finalizarRodada();
     }
-    inserirLetra(sender) {
-        const botao = sender.target;
+
+    private inserirLetra(sender: Event) {
+        const botao = sender.target as HTMLButtonElement;
+        
         for (let espaco of this.rodadas[this.lemaAct.rodada].children) {
             if (espaco.textContent == '') {
                 espaco.textContent = botao.textContent;
@@ -83,8 +132,10 @@ export class LemaView {
             }
         }
     }
-    apagarLetra(sender) {
-        const botao = sender.target;
+
+    private apagarLetra(sender: Event) {
+        const botao = sender.target as HTMLButtonElement;
+        
         for (let espaco of Array.from(this.rodadas[this.lemaAct.rodada].children).reverse()) {
             if (espaco.textContent != '') {
                 espaco.textContent = '';
@@ -92,13 +143,16 @@ export class LemaView {
             }
         }
     }
-    obterPalavraCompleta() {
+
+    private obterPalavraCompleta(): string {
         return Array.from(this.rodadas[this.lemaAct.rodada].children)
             .map(letra => letra.textContent)
             .join('');
     }
-    finalizarRodada() {
+
+    private finalizarRodada(): void {
         this.colorirConformeAvaliacaoLetras();
+
         if (this.lemaAct.verificaSeJogadorGanhou()) {
             this.jogadorGanhou();
             return;
@@ -107,21 +161,28 @@ export class LemaView {
             this.jogadorPerdeu();
             return;
         }
+        
         this.lemaAct.rodadaFinalizada();
+
         this.iniciarRodada();
     }
-    iniciarRodada() {
+
+    private iniciarRodada() {
         for (let i = 0; i < 5; i++) {
             let linha = this.rodadas[this.lemaAct.rodada].children;
-            Array.from(linha).forEach(letra => letra.style.backgroundColor = '#60475c');
+            Array.from(linha).forEach(letra => (letra as HTMLSpanElement).style.backgroundColor = '#60475c')
         }
     }
-    colorirConformeAvaliacaoLetras() {
-        let estadoLetras = this.lemaAct.obterEstadoLetras();
+
+    private colorirConformeAvaliacaoLetras(): void {
+        let estadoLetras: EstadoLetras[] = this.lemaAct.obterEstadoLetras();
+
         const botoesTeclado = Array.from(this.teclado.querySelectorAll('.key'));
+
         for (let i = 0; i < estadoLetras.length; i++) {
-            let letra = this.rodadas[this.lemaAct.rodada].children[i];
-            let botaoTeclado = botoesTeclado.find(l => l.textContent == letra.textContent);
+            let letra = this.rodadas[this.lemaAct.rodada].children[i] as HTMLSpanElement;
+            let botaoTeclado = botoesTeclado.find(l => l.textContent == letra.textContent) as HTMLButtonElement;
+
             switch (estadoLetras[i]) {
                 case EstadoLetras.ExistePosicaoCorreta:
                     letra.style.backgroundColor = '#349b18';
@@ -140,37 +201,48 @@ export class LemaView {
             }
         }
     }
-    jogadorGanhou() {
+
+    private jogadorGanhou(): void {
         this.atualizarHistorico(true);
         this.mostrarMensagemFinal('green');
     }
-    jogadorPerdeu() {
+    
+    private jogadorPerdeu(): void {
         this.atualizarHistorico(false);
         this.mostrarMensagemFinal('red');
     }
-    mostrarMensagemFinal(cor) {
+
+    private mostrarMensagemFinal(cor: string) {
         this.mensagem.textContent = this.lemaAct.MensagemFinal;
         this.mensagemContainer.classList.add('show-element');
         this.mensagem.style.backgroundColor = cor;
         this.teclado.style.pointerEvents = 'none';
     }
-    reiniciarJogo() {
+
+    private reiniciarJogo() {
         this.lemaAct = new Lema();
+        
         this.mensagemContainer.classList.remove('show-element');
+
         this.rodadas.forEach(rodada => {
             Array.from(rodada.children).forEach(letra => {
                 letra.textContent = '';
-                letra.style.backgroundColor = '';
+                (letra as HTMLSpanElement).style.backgroundColor = '';
             });
         });
+
         const botoesTeclado = Array.from(this.teclado.querySelectorAll('.key'));
+
         botoesTeclado.forEach(botoes => {
-            botoes.style.backgroundColor = '#382732';
+            (botoes as HTMLButtonElement).style.backgroundColor = '#382732';
         });
+
         this.teclado.style.pointerEvents = 'auto';
+
         this.iniciarRodada();
     }
-    carregarEstatisticas() {
+
+    private carregarEstatisticas() {
         this.jogosJogados.textContent = this.estatisticas.jogosJogados.toString();
         this.jogosGanhos.textContent = this.estatisticas.jogosGanhos.toString();
         this.porcentagemVitoria.textContent = this.estatisticas.porcentagemVitoria.toString() + '%';
@@ -178,23 +250,26 @@ export class LemaView {
         this.melhorSequencia.textContent = this.estatisticas.melhorSequencia.toString();
         this.atualizarBarrasGrafico();
     }
-    atualizarBarrasGrafico() {
+
+    private atualizarBarrasGrafico() {
         for (let i = 0; i < this.rodadas.length; i++) {
-            const barraElement = document.getElementById(`barraRodada${i + 1}`);
+            const barraElement = document.getElementById(`barraRodada${i + 1}`) as HTMLDivElement;
             const largura = (this.estatisticas.historico[i] || 0.1) * 10;
-            barraElement.children[1].style.width = `${largura}%`;
+            (barraElement.children[1] as HTMLParagraphElement).style.width = `${largura}%`;
             barraElement.children[1].textContent = this.estatisticas.historico[i].toString();
         }
-        const barraPerdaElement = document.getElementById('barraPerda');
+
+        const barraPerdaElement = document.getElementById('barraPerda') as HTMLDivElement;
         const larguraPerda = (this.estatisticas.historico[this.estatisticas.historico.length - 1]) * 10;
-        barraPerdaElement.children[1].style.width = `${larguraPerda}%`;
+        (barraPerdaElement.children[1] as HTMLParagraphElement).style.width = `${larguraPerda}%`;
         barraPerdaElement.children[1].textContent = this.estatisticas.historico[this.estatisticas.historico.length - 1].toString();
     }
-    atualizarHistorico(jogadorGanhou) {
+
+    public atualizarHistorico(jogadorGanhou: boolean) {
         this.estatisticas.jogosJogados++;
         this.estatisticas.jogosGanhos += jogadorGanhou ? 1 : 0;
         this.estatisticas.porcentagemVitoria = Math.floor((this.estatisticas.jogosGanhos / this.estatisticas.jogosJogados) * 100);
-        if (jogadorGanhou) {
+        if (jogadorGanhou){
             this.estatisticas.sequenciaVitoria += 1;
             this.estatisticas.historico[this.lemaAct.rodada]++;
         }
@@ -206,4 +281,3 @@ export class LemaView {
         this.lemaHistorico.salvarEstatisticas(this.estatisticas);
     }
 }
-//# sourceMappingURL=tela-lema.js.map

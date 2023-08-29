@@ -1,29 +1,38 @@
-import { EstadoLetras } from "./estado-letras.js";
+import { EstadoLetras } from "./estado-letras";
+
 export class Lema {
     constructor() {
-        this.jogosJogados = 0;
-        this.jogosGanhos = 0;
-        this.porcentagemVitoria = 0;
-        this.sequenciaVitoria = 0;
-        this.melhorSequencia = 0;
-        this.historico = [0, 0, 0, 0, 0, 0];
-        this.palavraSecreta = '';
-        this.mensagemFinal = '';
-        this.rodada = 0;
-        this.palavraEscolhida = '';
         this.iniciarJogo();
     }
-    get MensagemFinal() {
+
+    public jogosJogados: number = 0;
+    public jogosGanhos: number = 0;
+    public porcentagemVitoria: number = 0;
+    public sequenciaVitoria: number = 0;
+    public melhorSequencia: number = 0;
+    public historico: number[] = [0, 0, 0, 0, 0, 0];
+
+    private palavraSecreta: string = '';
+    private mensagemFinal: string = '';
+
+    get MensagemFinal(): string { 
         return this.mensagemFinal;
     }
-    get PalavraSecreta() {
+
+    get PalavraSecreta(): string {
         return this.palavraSecreta;
     }
-    iniciarJogo() {
+
+    public rodada: number = 0;
+    public palavraEscolhida: string = '';
+
+    public iniciarJogo(): void {
         this.gerarPalavraAleatoria();
     }
-    gerarPalavraAleatoria() {
-        const palavrasSecretas = [
+
+    public gerarPalavraAleatoria(): void {
+        const palavrasSecretas: string[] =
+        [
             "ácido", "adiar", "ímpar", "algar", "amado", "amigo", "anexo", "anuir", "aonde", "apelo",
             "aquém", "argil", "arroz", "assar", "atrás", "ávido", "azeri", "babar", "bagre", "banho",
             "barco", "bicho", "bolor", "brasa", "brava", "brisa", "bruto", "bulir", "caixa", "cansa",
@@ -63,15 +72,21 @@ export class Lema {
             "igual", "ileso", "imune", "irado", "isola", "jarra", "jaula", "jegue", "jeito", "jogar",
             "jovem", "juíza", "juizo", "julho", "junho", "jurar", "justa"
         ];
-        const numeroAleatorio = Math.floor(Math.random() * palavrasSecretas.length);
+
+        const numeroAleatorio: number = Math.floor(Math.random() * palavrasSecretas.length);
         this.palavraSecreta = palavrasSecretas[numeroAleatorio].toUpperCase();
     }
-    rodadaFinalizada() {
+
+    public rodadaFinalizada(): void {
         this.rodada++;
     }
-    obterEstadoLetras() {
-        const estadoLetras = [];
-        const normalize = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+    public obterEstadoLetras(): EstadoLetras[] {
+        const estadoLetras: EstadoLetras[] = [];
+
+        const normalize = (s: string) =>
+            s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
         for (let i = 0; i < this.palavraEscolhida.length; i++) {
             if (this.compararStringSemAcento(this.palavraEscolhida[i], this.palavraSecreta[i])) {
                 estadoLetras[i] = EstadoLetras.ExistePosicaoCorreta;
@@ -83,37 +98,49 @@ export class Lema {
                 estadoLetras[i] = EstadoLetras.NaoExiste;
             }
         }
+
         return estadoLetras;
     }
-    verificaSePalavraCompleta() {
-        return this.palavraEscolhida.length == 5;
+
+    public verificaSePalavraCompleta(): boolean {
+        return this.palavraEscolhida.length == 5
     }
-    verificaSeJogadorGanhou() {
+
+    public verificaSeJogadorGanhou(): boolean
+    {
         if (this.compararStringSemAcento(this.palavraEscolhida, this.palavraSecreta)) {
             this.mensagemFinal = "Parabéns, você acertou! Click 'aqui' para Jogar Novamente!";
             return true;
         }
+
         return false;
     }
-    verificaSeJogadorPerdeu() {
+
+    public verificaSeJogadorPerdeu(): boolean {
         if (this.rodada == 5) {
             this.mensagemFinal = `A palavra secreta era '${this.palavraSecreta}'. Click 'aqui' para Jogar Novamente!`;
             return true;
         }
+
         return false;
     }
-    avisoPalavraIncompleta() {
+
+    public avisoPalavraIncompleta(): string {
         return 'Palavra incompleta';
     }
-    compararStringSemAcento(letra1, letra2) {
-        const normalize = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+    public compararStringSemAcento(letra1: string, letra2: string): boolean {
+        const normalize = (s: string) =>
+            s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    
         return normalize(letra1).toUpperCase() === normalize(letra2).toUpperCase();
     }
-    atualizarHistorico(jogadorGanhou) {
+
+    public atualizarHistorico(jogadorGanhou: boolean) {
         this.jogosJogados++;
         this.jogosGanhos += jogadorGanhou ? 1 : 0;
         this.porcentagemVitoria = (this.jogosGanhos / this.jogosJogados) * 100;
-        if (jogadorGanhou) {
+        if (jogadorGanhou){
             this.sequenciaVitoria += 1;
         }
         else {
@@ -123,4 +150,3 @@ export class Lema {
         this.historico[this.rodada]++;
     }
 }
-//# sourceMappingURL=lema.js.map
