@@ -17,4 +17,4 @@ Confira a demonstração do projeto em: [Lema Demo](https://ljoaolucasl.github.i
 
 ## Autores
 
-- [@João Lucas Claudino](https://github.com/ljoaolucasl)
+- [@João Lucas Claudino](https://www.linkedin.com/in/joao-lucas-claudino/)
