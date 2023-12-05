@@ -2,6 +2,10 @@
 
 Um Jogo das Palavras feito com TypeScript
 
+## Demo
+
+Confira a demonstração do projeto em: [Lema Demo](https://ljoaolucasl.github.io/lema-game-ts/)
+
 ## Funcionalidades
 
 - Mais de 300 Palavras Secretas para tentar adivinhar
